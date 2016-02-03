@@ -27,7 +27,7 @@ class BTLEPeripheralViewController: UIViewController, CBPeripheralManagerDelegat
         super.viewDidLoad()
         
         // Start up the CBPeripheralManager
-        peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
+        peripheralManager = CBPeripheralManager(delegate: self, queue: dispatch_get_main_queue())
         
     }
     

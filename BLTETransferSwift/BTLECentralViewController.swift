@@ -19,12 +19,11 @@ class BTLECentralViewController: UIViewController, CBCentralManagerDelegate, CBP
     let TRANSFER_SERVICE_UUID = CBUUID(string: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961")
     let TRANSFER_CHARACTERISTIC_UUID = CBUUID(string: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // initialize central manager
-        centralManager = CBCentralManager()
+        centralManager = CBCentralManager(delegate: self, queue: dispatch_get_main_queue())
         
         // initialize data
         data = NSMutableData()
