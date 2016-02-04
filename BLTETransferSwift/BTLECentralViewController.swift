@@ -51,7 +51,7 @@ class BTLECentralViewController: UIViewController, CBCentralManagerDelegate, CBP
      */
     func scan() {
         centralManager.scanForPeripheralsWithServices([TRANSFER_SERVICE_UUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
-        print("1. STARTING SCAN FOR UUID SERVICE")
+        print("1. Scanning Started")
     }
     
     
@@ -98,11 +98,11 @@ class BTLECentralViewController: UIViewController, CBCentralManagerDelegate, CBP
     /** We've connected to the peripheral, now we need to discover the services and characteristics to find the 'transfer' characteristic.
      */
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
-        print("Peripheral Connected")
+        print("4. Peripheral Connected")
         
         //Stop scanning
         centralManager.stopScan()
-        print("Scanning Stopped")
+        print("5. Scanning Stopped")
         
         // Clear the data that we may already have
         data.length = 0
@@ -227,7 +227,7 @@ class BTLECentralViewController: UIViewController, CBCentralManagerDelegate, CBP
     */
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?)
     {
-        print("Peripheral Disconnected \n\n\n")
+        print("6. Peripheral Disconnected \n\n\n")
         discoveredPeripheral = nil;
         
         // We're disconnected, so start scanning again
