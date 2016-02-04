@@ -50,8 +50,8 @@ class BTLECentralViewController: UIViewController, CBCentralManagerDelegate, CBP
     /** Scan for peripherals - specifically for our service's 128bit CBUUID
      */
     func scan() {
-        centralManager.scanForPeripheralsWithServices([TRANSFER_SERVICE_UUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : "YES"])
-        print("STARTING SCAN")
+        centralManager.scanForPeripheralsWithServices([TRANSFER_SERVICE_UUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
+        print("1. STARTING SCAN FOR UUID SERVICE")
     }
     
     
@@ -70,7 +70,7 @@ class BTLECentralViewController: UIViewController, CBCentralManagerDelegate, CBP
             return
         }
         
-        print("Discovered \(peripheral.name) at \(RSSI)");
+        print("2. Discovered \(peripheral.name) at \(RSSI)");
         
         // Ok, it's in range - have we already seen it?
         if (self.discoveredPeripheral != peripheral) {
@@ -79,7 +79,7 @@ class BTLECentralViewController: UIViewController, CBCentralManagerDelegate, CBP
             self.discoveredPeripheral = peripheral
             
             // And connect
-            print("Connecting to peripheral \(peripheral)")
+            print("3. Connecting to peripheral \(peripheral)")
             centralManager.connectPeripheral(peripheral, options: nil)
         }
 
@@ -227,7 +227,7 @@ class BTLECentralViewController: UIViewController, CBCentralManagerDelegate, CBP
     */
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?)
     {
-        print("Peripheral Disconnected")
+        print("Peripheral Disconnected \n\n\n")
         discoveredPeripheral = nil;
         
         // We're disconnected, so start scanning again
