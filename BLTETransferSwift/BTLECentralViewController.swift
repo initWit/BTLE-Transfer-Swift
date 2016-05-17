@@ -245,25 +245,47 @@ class BTLECentralViewController: UIViewController, CBCentralManagerDelegate, CBP
         if (discoveredPeripheral.state != CBPeripheralState.Connected){
             return
         }
-
+        
         // See if we are subscribed to a characteristic on the peripheral
-        if (self.discoveredPeripheral.services != nil) {
-            for service in discoveredPeripheral.services! {
-                if (service.characteristics != nil) {
-                    for characteristic in service.characteristics! {
-                        if (characteristic.UUID == [TRANSFER_CHARACTERISTIC_UUID]) {
-                            if (characteristic.isNotifying) {
-                                // It is notifying, so unsubscribe
-                                discoveredPeripheral.setNotifyValue(false, forCharacteristic: characteristic)
-                                
-                                // And we're done.
-                                return
-                            }
-                        }
-                    }
+        // first check for any services
+        guard let discoveredServices = self.discoveredPeripheral.services
+            else { return } // just exit
+        
+        for eachService in discoveredServices {
+            
+            // check if there are characteristics on each service
+            guard let characteristics = eachService.characteristics
+                else { return } // should this be "continue"?
+            
+            for eachCharacteristic in characteristics {
+                
+                // if any characteristic is notifying, then unsubscribe
+                if eachCharacteristic.UUID == [TRANSFER_CHARACTERISTIC_UUID] && eachCharacteristic.isNotifying {
+                    discoveredPeripheral.setNotifyValue(false, forCharacteristic: eachCharacteristic)
+                    return
                 }
             }
         }
+        
+        // *** REFACTORED ABOVE
+        // See if we are subscribed to a characteristic on the peripheral
+//        if (self.discoveredPeripheral.services != nil) {
+//            for service in discoveredPeripheral.services! {
+//                if (service.characteristics != nil) {
+//                    for characteristic in service.characteristics! {
+//                        if (characteristic.UUID == [TRANSFER_CHARACTERISTIC_UUID]) {
+//                            if (characteristic.isNotifying) {
+//                                // It is notifying, so unsubscribe
+//                                discoveredPeripheral.setNotifyValue(false, forCharacteristic: characteristic)
+//                                
+//                                // And we're done.
+//                                return
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     
         // If we've got this far, we're connected, but we're not subscribed, so we just disconnect
         centralManager .cancelPeripheralConnection(discoveredPeripheral)
